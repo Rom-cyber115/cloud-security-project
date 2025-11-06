@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cloud Security Project - Login System</title>
+    <link rel="stylesheet" href="styles.css">
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🔐 Cloud Security Project</h1>
+            <p class="subtitle">Sistem Login Aman Berbasis Cloud</p>
+        </div>
+
+        <div class="card">
+            <h2>Selamat Datang</h2>
+            <p>Implementasi sistem keamanan cloud dengan Firebase</p>
+            
+            <div class="button-group">
+                <button class="btn btn-primary" onclick="goToPage('login.html')">
+                    📱 Login
+                </button>
+                <button class="btn btn-secondary" onclick="goToPage('register.html')">
+                    👤 Daftar Akun
+                </button>
+            </div>
+
+            <div class="features">
+                <h3>🛡️ Fitur Keamanan:</h3>
+                <ul>
+                    <li>✅ Firebase Authentication</li>
+                    <li>✅ Data Encryption</li>
+                    <li>✅ Form Validation</li>
+                    <li>✅ SSL/HTTPS Ready</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="tech-stack">
+            <h3>Teknologi yang Digunakan:</h3>
+            <div class="tech-items">
+                <span class="tech-item">HTML5</span>
+                <span class="tech-item">CSS3</span>
+                <span class="tech-item">JavaScript</span>
+                <span class="tech-item">Firebase</span>
+                <span class="tech-item">Vercel</span>
+            </div>
+        </div>
+    </div>
+
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+
+    <script src="script.js"></script>
+</body>
+</html>
