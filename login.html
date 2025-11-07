@@ -9,7 +9,7 @@
 <body>
     <div class="container">
         <div class="header">
-            <h1>🔑 Login</h1>
+            <h1> Login</h1>
             <p class="subtitle">Masuk ke sistem cloud yang aman</p>
         </div>
 
@@ -35,7 +35,7 @@
                 </div>
 
                 <button type="submit" class="btn btn-primary" id="loginBtn">
-                    🚀 Login ke Sistem
+                     Login ke Sistem
                 </button>
             </form>
 
@@ -48,7 +48,6 @@
                 <h4>🔧 Troubleshooting Login:</h4>
                 <p style="font-size: 14px; margin: 5px 0;">• Pastikan email sudah terdaftar</p>
                 <p style="font-size: 14px; margin: 5px 0;">• Cek password dengan benar</p>
-                <p style="font-size: 14px; margin: 5px 0;">• Buka F12 → Console untuk lihat error detail</p>
             </div>
         </div>
 
@@ -96,7 +95,7 @@
             const password = document.getElementById('password').value;
             const submitBtn = document.getElementById('loginBtn');
             
-            console.log("🔧 Attempting login for:", email);
+            console.log(" Attempting login for:", email);
             
             const originalText = submitBtn.textContent;
             submitBtn.textContent = '🔄 Memproses...';
@@ -104,7 +103,7 @@
             
             try {
                 const result = await loginWithEmail(email, password);
-                console.log("📨 Login result:", result);
+                console.log(" Login result:", result);
                 
                 if (result.success) {
                     showMessage('Login berhasil! Redirect ke dashboard...', 'success');
@@ -128,7 +127,7 @@
                     showMessage(errorMessage, 'error');
                 }
             } catch (error) {
-                console.error("💥 Unexpected error:", error);
+                console.error(" Unexpected error:", error);
                 showMessage('Terjadi kesalahan sistem. Coba lagi.', 'error');
             } finally {
                 submitBtn.textContent = originalText;
@@ -138,7 +137,7 @@
 
         // Test function untuk debug
         async function testLogin() {
-            console.log("🧪 Testing Firebase Auth...");
+            console.log(" Testing Firebase Auth...");
             
             // Test dengan user yang sudah ada
             const testEmail = "test@example.com";
@@ -156,4 +155,5 @@
         // document.addEventListener('DOMContentLoaded', testLogin);
     </script>
 </body>
+
 </html>
