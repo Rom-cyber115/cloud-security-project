@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Cloud Security</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🔑 Login</h1>
+            <p class="subtitle">Masuk ke sistem cloud yang aman</p>
+        </div>
+
+        <div class="card">
+            <div id="message" class="message"></div>
+
+            <form id="loginForm">
+                <div class="form-group">
+                    <label class="form-label">Email:</label>
+                    <input type="email" class="form-input" id="email" 
+                           placeholder="nama@email.com" required>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Password:</label>
+                    <div class="password-container">
+                        <input type="password" class="form-input with-toggle" id="password" 
+                               placeholder="Masukkan password" required>
+                        <button type="button" class="toggle-password" onclick="togglePassword('password')" title="Tampilkan password">
+                            👁️
+                        </button>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-primary" id="loginBtn">
+                    🚀 Login ke Sistem
+                </button>
+            </form>
+
+            <button class="btn btn-secondary" onclick="goToPage('index.html')" 
+                    style="margin-top: 10px;">
+                ⬅ Kembali ke Beranda
+            </button>
+
+            <div style="margin-top: 20px; padding: 15px; background: #fff3cd; border-radius: 5px;">
+                <h4>🔧 Troubleshooting Login:</h4>
+                <p style="font-size: 14px; margin: 5px 0;">• Pastikan email sudah terdaftar</p>
+                <p style="font-size: 14px; margin: 5px 0;">• Cek password dengan benar</p>
+                <p style="font-size: 14px; margin: 5px 0;">• Buka F12 → Console untuk lihat error detail</p>
+            </div>
+        </div>
+
+        <div class="tech-stack">
+            <h3>Fitur Keamanan Login:</h3>
+            <div class="tech-items">
+                <span class="tech-item">Email Validation</span>
+                <span class="tech-item">Password Encryption</span>
+                <span class="tech-item">Session Management</span>
+                <span class="tech-item">HTTPS Only</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+    
+    <!-- Your custom scripts -->
+    <script src="script.js"></script>
+    
+    <!-- Login specific script -->
+    <script>
+        // Toggle password function
+        function togglePassword(inputId) {
+            const passwordInput = document.getElementById(inputId);
+            const toggleIcon = document.querySelector(`[onclick="togglePassword('${inputId}')"]`);
+            
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                toggleIcon.textContent = '🙈';
+                toggleIcon.title = 'Sembunyikan password';
+            } else {
+                passwordInput.type = 'password';
+                toggleIcon.textContent = '👁️';
+                toggleIcon.title = 'Tampilkan password';
+            }
+        }
+
+        document.getElementById('loginForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const submitBtn = document.getElementById('loginBtn');
+            
+            console.log("🔧 Attempting login for:", email);
+            
+            const originalText = submitBtn.textContent;
+            submitBtn.textContent = '🔄 Memproses...';
+            submitBtn.disabled = true;
+            
+            try {
+                const result = await loginWithEmail(email, password);
+                console.log("📨 Login result:", result);
+                
+                if (result.success) {
+                    showMessage('Login berhasil! Redirect ke dashboard...', 'success');
+                    
+                    setTimeout(() => {
+                        window.location.href = 'dashboard.html';
+                    }, 2000);
+                } else {
+                    let errorMessage = 'Login gagal';
+                    
+                    if (result.error.includes('user-not-found')) {
+                        errorMessage = 'Email tidak terdaftar. Silakan daftar terlebih dahulu.';
+                    } else if (result.error.includes('wrong-password')) {
+                        errorMessage = 'Password salah. Coba lagi.';
+                    } else if (result.error.includes('invalid-email')) {
+                        errorMessage = 'Format email tidak valid.';
+                    } else {
+                        errorMessage = `Login gagal: ${result.error}`;
+                    }
+                    
+                    showMessage(errorMessage, 'error');
+                }
+            } catch (error) {
+                console.error("💥 Unexpected error:", error);
+                showMessage('Terjadi kesalahan sistem. Coba lagi.', 'error');
+            } finally {
+                submitBtn.textContent = originalText;
+                submitBtn.disabled = false;
+            }
+        });
+
+        // Test function untuk debug
+        async function testLogin() {
+            console.log("🧪 Testing Firebase Auth...");
+            
+            // Test dengan user yang sudah ada
+            const testEmail = "test@example.com";
+            const testPassword = "Password123";
+            
+            try {
+                const result = await loginWithEmail(testEmail, testPassword);
+                console.log("Test login result:", result);
+            } catch (error) {
+                console.error("Test login error:", error);
+            }
+        }
+
+        // Run test on load (optional)
+        // document.addEventListener('DOMContentLoaded', testLogin);
+    </script>
+</body>
+</html>

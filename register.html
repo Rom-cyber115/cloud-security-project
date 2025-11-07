@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daftar - Cloud Security</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>👤 Daftar Akun</h1>
+            <p class="subtitle">Buat akun baru dengan keamanan terbaik</p>
+        </div>
+
+        <div class="card">
+            <div id="message" class="message"></div>
+
+            <form id="registerForm">
+                <div class="form-group">
+                    <label class="form-label">Nama Lengkap:</label>
+                    <input type="text" class="form-input" id="fullName" 
+                           placeholder="Masukkan nama lengkap" required>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Email:</label>
+                    <input type="email" class="form-input" id="email" 
+                           placeholder="nama@email.com" required>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Password:</label>
+                    <input type="password" class="form-input" id="password" 
+                           placeholder="Minimal 6 karakter" required minlength="6">
+                    <div id="passwordStrength" style="margin-top: 5px; font-size: 12px;"></div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Konfirmasi Password:</label>
+                    <input type="password" class="form-input" id="confirmPassword" 
+                           placeholder="Ulangi password" required>
+                </div>
+
+                <button type="submit" class="btn btn-primary">
+                    ✨ Buat Akun Baru
+                </button>
+            </form>
+
+            <button class="btn btn-secondary" onclick="goToPage('index.html')" 
+                    style="margin-top: 10px;">
+                ⬅ Kembali ke Beranda
+            </button>
+        </div>
+
+        <div class="tech-stack">
+            <h3>Keamanan Registrasi:</h3>
+            <div class="tech-items">
+                <span class="tech-item">Password Strength Check</span>
+                <span class="tech-item">Email Verification Ready</span>
+                <span class="tech-item">Data Encryption</span>
+                <span class="tech-item">Secure Storage</span>
+            </div>
+        </div>
+    </div>
+
+
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+
+    <script src="script.js"></script>
+    <script>
+        // Password strength indicator
+document.getElementById('password').addEventListener('input', function(e) {
+    const password = e.target.value;
+    const strengthDiv = document.getElementById('passwordStrength');
+    
+    if (password.length === 0) {
+        strengthDiv.textContent = '';
+        return;
+    }
+    
+    const strength = checkPasswordStrength(password);
+    const strengthText = {
+        'weak': '❌ Password lemah',
+        'medium': '⚠️ Password sedang', 
+        'strong': '✅ Password kuat'
+    };
+    
+    const strengthColor = {
+        'weak': 'red',
+        'medium': 'orange',
+        'strong': 'green'
+    };
+    
+    strengthDiv.textContent = strengthText[strength];
+    strengthDiv.style.color = strengthColor[strength];
+    strengthDiv.style.fontWeight = 'bold';
+});
+
+document.getElementById('registerForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    
+    const fullName = document.getElementById('fullName').value;
+    const email = document.getElementById('email').value;
+    const password = document.getElementById('password').value;
+    const confirmPassword = document.getElementById('confirmPassword').value;
+    const submitBtn = this.querySelector('button[type="submit"]');
+    
+    console.log("📝 Form data:", { fullName, email, password: '***' });
+    
+    // Validasi password match
+    if (password !== confirmPassword) {
+        showMessage('Password tidak cocok!', 'error');
+        return;
+    }
+    
+    // Validasi strength password
+    if (checkPasswordStrength(password) === 'weak') {
+        showMessage('Password terlalu lemah. Gunakan kombinasi huruf, angka, dan simbol.', 'error');
+        return;
+    }
+    
+    const originalText = submitBtn.textContent;
+    submitBtn.textContent = '🔄 Membuat akun...';
+    submitBtn.disabled = true;
+    
+    try {
+        const userData = { fullName };
+        console.log("🚀 Starting registration...");
+        
+        const result = await registerWithEmail(email, password, userData);
+        console.log("📨 Registration result:", result);
+        
+        if (result.success) {
+            showMessage('Akun berhasil dibuat! Redirect ke dashboard...', 'success');
+            
+            setTimeout(() => {
+                window.location.href = 'dashboard.html';
+            }, 2000);
+        } else {
+            showMessage(`Pendaftaran gagal: ${result.error}`, 'error');
+        }
+    } catch (error) {
+        console.error("💥 Unexpected error:", error);
+        showMessage('Terjadi kesalahan sistem. Coba lagi.', 'error');
+    } finally {
+        submitBtn.textContent = originalText;
+        submitBtn.disabled = false;
+    }
+});
+    </script>
+</body>
+</html>
